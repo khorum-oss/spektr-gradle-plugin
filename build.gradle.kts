@@ -48,8 +48,8 @@ tasks.jar {
 	archiveBaseName.set("spektr")
 }
 
-// Dokka V2 removed the `dokkaHtml` task name. Alias it for plugins that still reference it.
-tasks.register("dokkaHtml") {
+// Dokka V2's `dokkaHtml` is a lifecycle task that errors by default. Wire it to the V2 generate task.
+tasks.named("dokkaHtml") {
 	dependsOn("dokkaGenerateHtml")
 }
 
