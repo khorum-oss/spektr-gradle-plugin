@@ -16,7 +16,7 @@ plugins {
 }
 
 group = "org.khorum.oss.plugins.open.spektr"
-version = file("plugins/VERSION").readText().trim()
+version = file("VERSION").readText().trim()
 
 
 buildscript {
