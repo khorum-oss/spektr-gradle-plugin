@@ -48,6 +48,11 @@ tasks.jar {
 	archiveBaseName.set("spektr")
 }
 
+// Dokka V2 removed the `dokkaHtml` task name. Alias it for plugins that still reference it.
+tasks.register("dokkaHtml") {
+	dependsOn("dokkaGenerateHtml")
+}
+
 // Disable Kover instrumentation globally to avoid race condition
 // with kover-agent.args file during parallel builds (Kover 0.7.x bug)
 extensions.configure<kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension> {
