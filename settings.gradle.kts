@@ -1,6 +1,4 @@
-rootProject.name = "spektr"
-
-include("plugins")
+rootProject.name = "spektr-gradle-plugin"
 
 pluginManagement {
     repositories {

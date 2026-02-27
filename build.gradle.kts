@@ -5,8 +5,9 @@ import kotlin.apply
 
 plugins {
 	kotlin("jvm") version "2.3.0"
-	id("io.gitlab.arturbosch.detekt") version "1.23.8"
-	id("org.jetbrains.dokka") version "1.9.20"
+	id("dev.detekt") version "2.0.0-alpha.2"
+	id("org.jetbrains.dokka") version "2.1.0"
+	id("org.jetbrains.dokka-javadoc") version "2.1.0"
 	id("org.jetbrains.kotlinx.kover") version "0.7.6"
 	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.0"
 	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.0"
@@ -16,7 +17,7 @@ plugins {
 }
 
 group = "org.khorum.oss.plugins.open.spektr"
-version = file("plugins/VERSION").readText().trim()
+version = file("VERSION").readText().trim()
 
 
 buildscript {
@@ -116,6 +117,6 @@ detekt {
 	buildUponDefaultConfig = true
 	allRules = false
 	config.setFrom(files("$rootDir/detekt.yml"))
-	baseline = file("$rootDir/detekt-baseline.xml")
+	source.setFrom("src/main/kotlin")
 	parallel = true
 }
