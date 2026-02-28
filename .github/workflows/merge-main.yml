@@ -11,10 +11,6 @@ on:
         description: 'Bump the patch version before publishing'
         type: boolean
         default: true
-      custom-version:
-        description: 'Set a specific version (overrides bump). Leave empty to use bump or current version.'
-        type: string
-        default: ''
 
 concurrency:
   group: merge-main
@@ -24,57 +20,26 @@ jobs:
   version:
     if: >-
       github.event_name == 'push' ||
-      github.event.inputs.bump-version == 'true' ||
-      github.event.inputs.custom-version != ''
-    runs-on: ubuntu-latest
+      github.event.inputs.bump-version == 'true'
+    uses: violabs/public-cicd/.github/workflows/version-bump.yml@main
     permissions:
       contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Determine version
-        id: version
-        env:
-          CUSTOM_VERSION: ${{ github.event.inputs.custom-version }}
-        run: |
-          OLD_VERSION=$(cat VERSION)
-          if [ -n "$CUSTOM_VERSION" ]; then
-            echo "$CUSTOM_VERSION" > VERSION
-            echo "new_version=$CUSTOM_VERSION" >> "$GITHUB_OUTPUT"
-          else
-            IFS='.' read -r major minor patch <<< "$OLD_VERSION"
-            patch=$((patch + 1))
-            NEW_VERSION="${major}.${minor}.${patch}"
-            echo "$NEW_VERSION" > VERSION
-            echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
-          fi
-          echo "old_version=$OLD_VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Commit & push
-        env:
-          NEW_VERSION: ${{ steps.version.outputs.new_version }}
-          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
-        run: |
-          git config user.name "${APP_SLUG}[bot]"
-          git config user.email "${APP_SLUG}[bot]@users.noreply.github.com"
-          git add VERSION
-          git diff --cached --quiet && echo "No version change" && exit 0
-          git commit -m "chore: bump version to ${NEW_VERSION} [skip ci]"
-          git push origin HEAD:main
 
   publish:
     needs: version
     if: always() && !failure() && !cancelled()
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.read-version.outputs.version }}
     steps:
       - name: Checkout latest
         uses: actions/checkout@v4
         with:
           ref: main
+
+      - name: Read version
+        id: read-version
+        run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Java & Gradle
         uses: violabs/public-cicd/.github/actions/setup-java-gradle@main
@@ -87,16 +52,44 @@ jobs:
           DO_SPACES_API_KEY: ${{ secrets.DO_SPACES_API_KEY }}
           DO_SPACES_SECRET: ${{ secrets.DO_SPACES_SECRET }}
 
+  release:
+    needs: [ version, publish ]
+    if: always() && needs.publish.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout latest
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Create release tag
+        env:
+          VERSION: ${{ needs.publish.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PREV_TAG=$(git tag --sort=-v:refname | head -n 1)
+          if [ -n "$PREV_TAG" ]; then
+            NOTES=$(git log "${PREV_TAG}..HEAD" --pretty=format:"- %s" --no-merges)
+          else
+            NOTES=$(git log --pretty=format:"- %s" --no-merges -20)
+          fi
+          gh release create "v${VERSION}" \
+            --title "v${VERSION}" \
+            --notes "${NOTES}" \
+            --target main
+
   notify-discord:
     name: Notify Discord
-    needs: [ version, publish ]
+    needs: [ version, publish, release ]
     if: always()
     uses: violabs/public-cicd/.github/workflows/notify-discord.yml@main
     with:
       runs-on: ubuntu-latest
       workflow_name: ${{ github.workflow }}
       build_result: ${{ needs.publish.result == 'success' && 'success' || 'failure' }}
-      version: ${{ needs.version.outputs.old-version || '' }}
-      next_version: ${{ needs.version.outputs.new-version || '' }}
+      version: ${{ needs.publish.outputs.version || '' }}
     secrets:
       DISCORD_WEBHOOK_URL: ${{ secrets.PUBLIC_RELEASE_DISCORD_WEBHOOK }}
