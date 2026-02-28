@@ -9,7 +9,7 @@ plugins {
 	id("org.jetbrains.dokka") version "2.1.0"
 	id("org.jetbrains.dokka-javadoc") version "2.1.0"
 	id("org.jetbrains.kotlinx.kover") version "0.7.6"
-	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.0"
+	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.2"
 	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.0"
 	id("org.khorum.oss.plugins.open.secrets") version "1.0.0"
 	id("org.khorum.oss.plugins.open.pipeline") version "1.0.0"
@@ -46,11 +46,6 @@ dependencies {
 
 tasks.jar {
 	archiveBaseName.set("spektr")
-}
-
-// Dokka V2's `dokkaHtml` is a lifecycle task that errors by default. Wire it to the V2 generate task.
-tasks.named("dokkaHtml") {
-	dependsOn("dokkaGenerateHtml")
 }
 
 // Disable Kover instrumentation globally to avoid race condition
