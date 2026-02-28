@@ -91,5 +91,6 @@ jobs:
       workflow_name: ${{ github.workflow }}
       build_result: ${{ needs.publish.result == 'success' && 'success' || 'failure' }}
       version: ${{ needs.publish.outputs.version || '' }}
+      custom_description: Published to open-reliquary
     secrets:
       DISCORD_WEBHOOK_URL: ${{ secrets.PUBLIC_RELEASE_DISCORD_WEBHOOK }}
