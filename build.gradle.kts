@@ -7,10 +7,10 @@ plugins {
 	kotlin("jvm") version "2.3.0"
 	id("dev.detekt") version "2.0.0-alpha.2"
 	id("org.jetbrains.kotlinx.kover") version "0.7.6"
-	id("org.khorum.oss.plugins.open.secrets") version "1.0.4"
-	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.4"
-	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.4"
-	id("org.khorum.oss.plugins.open.pipeline") version "1.0.4"
+	id("org.khorum.oss.plugins.open.secrets") version "1.0.5"
+	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.5"
+	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.5"
+	id("org.khorum.oss.plugins.open.pipeline") version "1.0.5"
 	`kotlin-dsl`
 }
 
