@@ -6,13 +6,11 @@ import kotlin.apply
 plugins {
 	kotlin("jvm") version "2.3.0"
 	id("dev.detekt") version "2.0.0-alpha.2"
-	id("org.jetbrains.dokka") version "2.1.0"
-	id("org.jetbrains.dokka-javadoc") version "2.1.0"
 	id("org.jetbrains.kotlinx.kover") version "0.7.6"
-	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.2"
-	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.0"
-	id("org.khorum.oss.plugins.open.secrets") version "1.0.0"
-	id("org.khorum.oss.plugins.open.pipeline") version "1.0.0"
+	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.3"
+	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.3"
+	id("org.khorum.oss.plugins.open.secrets") version "1.0.3"
+	id("org.khorum.oss.plugins.open.pipeline") version "1.0.3"
 	`kotlin-dsl`
 }
 
@@ -82,6 +80,7 @@ tasks.uploadToDigitalOceanSpaces?.apply {
 
 mavenGeneratedArtifacts {
 	publicationName = "digitalOceanSpaces"  // Must match the name expected by the DO Spaces plugin
+	withDokka = false  // Dokka V2 is incompatible with the V1 task names this plugin uses
 	name = "Spektr Plugin"
 	description = """
             A plugin for configuring Spektr endpoints in Gradle projects.
