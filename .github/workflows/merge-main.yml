@@ -86,3 +86,17 @@ jobs:
         env:
           DO_SPACES_API_KEY: ${{ secrets.DO_SPACES_API_KEY }}
           DO_SPACES_SECRET: ${{ secrets.DO_SPACES_SECRET }}
+
+  notify-discord:
+    name: Notify Discord
+    needs: [ version, publish ]
+    if: always()
+    uses: violabs/public-cicd/.github/workflows/notify-discord.yml@main
+    with:
+      runs-on: ubuntu-latest
+      workflow_name: ${{ github.workflow }}
+      build_result: ${{ needs.publish.result == 'success' && 'success' || 'failure' }}
+      version: ${{ needs.version.outputs.old-version || '' }}
+      next_version: ${{ needs.version.outputs.new-version || '' }}
+    secrets:
+      DISCORD_WEBHOOK_URL: ${{ secrets.PUBLIC_RELEASE_DISCORD_WEBHOOK }}
