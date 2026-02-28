@@ -44,10 +44,6 @@ dependencies {
 	testImplementation(gradleTestKit())
 }
 
-tasks.jar {
-	archiveBaseName.set("spektr")
-}
-
 // Disable Kover instrumentation globally to avoid race condition
 // with kover-agent.args file during parallel builds (Kover 0.7.x bug)
 extensions.configure<kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension> {

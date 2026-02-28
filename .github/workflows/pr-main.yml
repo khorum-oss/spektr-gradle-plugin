@@ -33,3 +33,4 @@ jobs:
     uses: violabs/public-cicd/.github/workflows/gradle-detekt.yml@main
     with:
       java-version: '21'
+
