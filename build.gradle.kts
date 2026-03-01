@@ -9,7 +9,7 @@ plugins {
 	id("org.jetbrains.kotlinx.kover") version "0.7.6"
 	id("org.khorum.oss.plugins.open.secrets") version "1.0.5"
 	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.5"
-	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.5"
+	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.6"
 	id("org.khorum.oss.plugins.open.pipeline") version "1.0.5"
 	`kotlin-dsl`
 }
@@ -70,6 +70,7 @@ digitalOceanSpacesPublishing {
 	secretKey = project.getPropertyOrEnv("spaces.secret", "DO_SPACES_SECRET")
 	publishedVersion = version.toString()
 	isPlugin = true
+	pluginId = "org.khorum.oss.plugins.open.spektr"
 	dryRun = false
 }
 
