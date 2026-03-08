@@ -51,6 +51,8 @@ jobs:
         env:
           DO_SPACES_API_KEY: ${{ secrets.DO_SPACES_API_KEY }}
           DO_SPACES_SECRET: ${{ secrets.DO_SPACES_SECRET }}
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          GPG_SIGNING_PASSWORD: ${{ secrets.GPG_SIGNING_PASSWORD }}
 
   coverage-and-sonar:
     name: Coverage & SonarCloud (main baseline)
