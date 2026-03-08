@@ -9,8 +9,8 @@ plugins {
 	id("org.jetbrains.kotlinx.kover") version "0.7.6"
 	id("org.sonarqube") version "7.0.0.6105"
 	id("org.khorum.oss.plugins.open.secrets") version "1.0.0"
-	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.2"
-	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.2"
+	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.3"
+	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.3"
 	id("org.khorum.oss.plugins.open.pipeline") version "1.0.0"
 	`kotlin-dsl`
 }
