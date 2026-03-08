@@ -2,6 +2,7 @@
 
 A Gradle plugin for building and versioning [Spektr](https://github.com/khorum-oss/spektr) endpoint JARs. It wraps the Shadow plugin to produce fat JARs with DSL classes excluded, and provides automatic version bumping and caching for Docker-based workflows.
 
+
 ## Requirements
 
 - Gradle 8.0+

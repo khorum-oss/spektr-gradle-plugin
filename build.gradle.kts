@@ -7,9 +7,10 @@ plugins {
 	kotlin("jvm") version "2.3.0"
 	id("dev.detekt") version "2.0.0-alpha.2"
 	id("org.jetbrains.kotlinx.kover") version "0.7.6"
+	id("org.sonarqube") version "7.0.0.6105"
 	id("org.khorum.oss.plugins.open.secrets") version "1.0.0"
-	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.2"
-	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.2"
+	id("org.khorum.oss.plugins.open.publishing.maven-generated-artifacts") version "1.0.3"
+	id("org.khorum.oss.plugins.open.publishing.digital-ocean-spaces") version "1.0.3"
 	id("org.khorum.oss.plugins.open.pipeline") version "1.0.0"
 	`kotlin-dsl`
 }
@@ -115,4 +116,14 @@ detekt {
 	config.setFrom(files("$rootDir/detekt.yml"))
 	source.setFrom("src/main/kotlin")
 	parallel = true
+}
+
+sonar {
+	properties {
+		property("sonar.projectKey", "khorum-oss_spektr-gradle-plugin")
+		property("sonar.organization", "khorum-oss")
+		property("sonar.host.url", "https://sonarcloud.io")
+		property("sonar.coverage.jacoco.xmlReportPaths",
+			"${layout.buildDirectory.get()}/reports/kover/report.xml")
+	}
 }
